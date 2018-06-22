@@ -1,0 +1,1 @@
+Game.rooms['W17N12'].energyAvailable
