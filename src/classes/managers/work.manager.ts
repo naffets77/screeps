@@ -62,7 +62,7 @@ export class WorkManager implements Runnable {
         jobComplete = GetEnergyJob.process(creep, target as Structure<StructureConstant>);
         break;
       case 'Harvest':
-        const pos = new RoomPosition((creep.memory as any)['jobMisc'].pos.x, (creep.memory as any)['jobMisc'].pos.y, 'W17N12');
+        const pos = new RoomPosition((creep.memory as any)['jobMisc'].pos.x, (creep.memory as any)['jobMisc'].pos.y, 'sim');
         jobComplete = HarvestJob.process(creep, pos, this.getObjectById(creep, (creep.memory as any).jobTargetIds[0]));
         break;
       case 'Repair':

@@ -16,17 +16,18 @@ export class MemoryManager {
   }
 
   public run() {
-    this.infoTracker.scanCountDown--;
     // console.log('Updating Brain In ... ' + this.infoTracker.scanCountDown);
 
-    if (this.infoTracker.scanCountDown <= 0) {
-      console.log('*** UPDATES ***');
-      this.reportFlag = true;
-      this.infoTracker.scanCountDown = this.ticksTillScan;
-      this.infoTracker.controllerLevel = this.getControllerLevel();
-    } else {
-      this.reportFlag = false;
-    }
+    // Comment back in for reporting
+    // this.infoTracker.scanCountDown--;
+    // if (this.infoTracker.scanCountDown <= 0) {
+    //   console.log('*** UPDATES ***');
+    //   this.reportFlag = true;
+    //   this.infoTracker.scanCountDown = this.ticksTillScan;
+    //   this.infoTracker.controllerLevel = this.getControllerLevel();
+    // } else {
+    //   this.reportFlag = false;
+    // }
 
     // update memory...
     Memory['INFO_TRACKER'].scanCountDown = this.infoTracker.scanCountDown;
@@ -51,7 +52,7 @@ export class MemoryManager {
         controllerLevel: this.getControllerLevel(),
         room: {
           extensionCount: 0,
-          name: 'W17N12'
+          name: 'sim' // should be updated to name of room you tart with. Could be dynamically updated somehow???
         },
         creepTracker: {
           // magic strings ??

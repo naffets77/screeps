@@ -76,7 +76,7 @@ export class ControllerManager implements Runnable {
   private spawnCreep(creeps: Creep[], queuedCreeps: SpawnRequest[]) {
     const creepsToSpawn = this.getNumberOfCreepsToSpawn(creeps, queuedCreeps);
 
-    console.log('number of creeps to spawn' + creepsToSpawn);
+    // console.log('number of creeps to spawn ' + creepsToSpawn);
 
     if (creepsToSpawn > 0) {
       const creepBodyParts = ScreepUtilsCreepBuilder.getBody(1300, {

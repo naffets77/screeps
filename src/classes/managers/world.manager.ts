@@ -9,6 +9,7 @@ import { RoomManager } from './room.manager';
 import { MemoryInfoTracker } from 'models/memory-info-tracker';
 import { ExternalRoomManager } from './world-managers/external-room.manager';
 import { ScoutManager } from './creep-managers/scout.manager';
+import { OvermindManager } from './world-managers/overmind-manager/overmind.manager';
 
 export class WorldManager implements Runnable {
   private memTrackerHash: string = 'TRACKERS';
@@ -20,14 +21,16 @@ export class WorldManager implements Runnable {
 
   private roomManager: RoomManager;
   private externalRoomManager: ExternalRoomManager;
+  private overmind: OvermindManager;
 
   constructor() {
     this.memTracker = Memory[this.memTrackerHash] as MemoryInfoTracker;
     this.initMemoryTracker();
 
     this.gr = new GameReferences();
-    this.roomManager = new RoomManager(this.gr);
+    this.overmind = new OvermindManager();
     this.externalRoomManager = new ExternalRoomManager();
+    this.roomManager = new RoomManager(this.gr, this.overmind);
 
     // iterate over the list of rooms, if we have plans for them we'll load the plan otherwise
     // we'll have default behaviors.

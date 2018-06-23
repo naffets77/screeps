@@ -67,7 +67,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
     }
   }
 
-  const roomName = 'W17N12';
+  const roomName = 'sim';
 
   const hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
   if (hostiles.length > 0) {

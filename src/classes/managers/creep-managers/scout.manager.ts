@@ -39,7 +39,7 @@ export class ScoutManager extends BaseCreepManager implements Runnable {
   private assignCreeps(creeps: Creep[]) {
     const idleCreeps: Creep[] = this.gr.utilities.getIdleCreeps(creeps);
 
-    console.log('Idle scout count ' + idleCreeps.length);
+    // console.log('Idle scout count ' + idleCreeps.length);
     for (const idleCreep of idleCreeps) {
       const room: ExternalRoomTracker = this.getRoomToScout();
 
@@ -128,7 +128,7 @@ export class ScoutManager extends BaseCreepManager implements Runnable {
   }
 
   private getRoomToScout(): ExternalRoomTracker {
-    console.log('Getting room to scout');
+    // console.log('Getting room to scout');
 
     // @ts-ignore
     let roomToFind: ExternalRoomTracker = null;

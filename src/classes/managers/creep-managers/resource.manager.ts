@@ -19,10 +19,11 @@ export class ResourceManager implements Runnable {
     this.rm = roomManager;
     // this.bodyPartsHauler = this.generateBodyParts("hauler");
     // this.bodyPartsGatherer = this.generateBodyParts("gatherer");
-    this.initMemory();
   }
 
   public run() {
+    this.initMemory();
+
     const room = Game.rooms[this.rm.getRoomName()];
 
     const energyNodes = this.getEnergyNodes();
@@ -35,7 +36,7 @@ export class ResourceManager implements Runnable {
     this.report(energyNodes, gatherers, haulers, queuedCreeps);
 
     if (this.rm.activeRoom.energyAvailable >= 600) {
-      if (energyNodes.length * 2 + 1 > queuedCreeps.length + gatherers.length + haulers.length) {
+      if (energyNodes && energyNodes.length * 2 + 1 > queuedCreeps.length + gatherers.length + haulers.length) {
         this.handleCreateSpawnRequest(energyNodes, queuedCreeps, haulers, gatherers);
       }
     }
@@ -79,10 +80,10 @@ export class ResourceManager implements Runnable {
   private report(energyNodes: any, gatherers: Creep[], haulers: Creep[], queuedCreeps: SpawnRequest[]) {
     if (this.gr.memoryManager.reportFlag) {
       console.log(' ResourceManager Report');
-      console.log(`  Resource Nodes: ${energyNodes.length}`);
-      console.log(`  Gatherers: ${gatherers.length}`);
-      console.log(`  Haulers: ${haulers.length}`);
-      console.log(`  Queued: ${queuedCreeps.length}`);
+      console.log(`  Resource Nodes: ${energyNodes ? energyNodes.length : 0}`);
+      console.log(`  Gatherers: ${gatherers.length ? gatherers.length : 0}`);
+      console.log(`  Haulers: ${haulers.length ? haulers.length : 0}`);
+      console.log(`  Queued: ${queuedCreeps.length ? queuedCreeps.length : 0}`);
 
       this.updateNodes();
     }
@@ -238,11 +239,13 @@ export class ResourceManager implements Runnable {
   private updateNodes() {
     const room = Game.rooms[this.rm.getRoomName()];
 
-    for (const node of this.nodeReference) {
-      // @ts-ignore
-      node.gathererId = null;
-      // @ts-ignore
-      node.haulerId = null;
+    if (this.nodeReference) {
+      for (const node of this.nodeReference) {
+        // @ts-ignore
+        node.gathererId = null;
+        // @ts-ignore
+        node.haulerId = null;
+      }
     }
   }
 
@@ -296,13 +299,17 @@ export class ResourceManager implements Runnable {
     // @ts-ignore
     const roomInfo = this.gr.memoryManager.staticInfoTracker.rooms[this.rm.getRoomName()];
 
-    const energyNodes = [];
-    for (const pointOfInterest of roomInfo.pointsOfInterest) {
-      if (pointOfInterest.type === 'Energy Node') {
-        energyNodes.push(pointOfInterest);
+    if (roomInfo) {
+      const energyNodes = [];
+      for (const pointOfInterest of roomInfo.pointsOfInterest) {
+        if (pointOfInterest.type === 'Energy Node') {
+          energyNodes.push(pointOfInterest);
+        }
       }
+      return energyNodes;
     }
-    return energyNodes;
+
+    return null;
   }
 
   private getOptimalBodyGatherer(energy: number): BodyPartConstant[] {
@@ -362,29 +369,31 @@ export class ResourceManager implements Runnable {
       const energyNodes = this.getEnergyNodes();
       const energyNodesForMemory = [];
 
-      for (const node of energyNodes) {
-        const roomPosition = new RoomPosition(node.pos.x, node.pos.y, room.name);
-        const energyResource: Source = room.lookForAt(LOOK_SOURCES, roomPosition)[0];
+      if (energyNodes != null) {
+        for (const node of energyNodes) {
+          const roomPosition = new RoomPosition(node.pos.x, node.pos.y, room.name);
+          const energyResource: Source = room.lookForAt(LOOK_SOURCES, roomPosition)[0];
 
-        if (energyResource) {
-          energyNodesForMemory.push({
-            pos: {
-              x: node.pos.x,
-              y: node.pos.y
-            },
-            harvesterPosition: {
-              x: node.harvesterPosition.x,
-              y: node.harvesterPosition.y
-            },
-            resourceId: energyResource.id,
-            gathererId: null,
-            haulerId: null
-          });
+          if (energyResource) {
+            energyNodesForMemory.push({
+              pos: {
+                x: node.pos.x,
+                y: node.pos.y
+              },
+              harvesterPosition: {
+                x: node.harvesterPosition.x,
+                y: node.harvesterPosition.y
+              },
+              resourceId: energyResource.id,
+              gathererId: null,
+              haulerId: null
+            });
+          }
         }
-      }
 
-      // @ts-ignore
-      Memory['RESOURCE_TRACKER'][room.name] = energyNodesForMemory;
+        // @ts-ignore
+        Memory['RESOURCE_TRACKER'][room.name] = energyNodesForMemory;
+      }
     }
 
     this.nodeReference = Memory['RESOURCE_TRACKER'][room.name];
