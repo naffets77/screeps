@@ -7,6 +7,7 @@ import { ControllerManager } from './creep-managers/controller.manager';
 import { ScoutManager } from './creep-managers/scout.manager';
 import { ScreepConfig } from 'config';
 import { OvermindManager } from './world-managers/overmind-manager/overmind.manager';
+import { BootstrapManager } from './creep-managers/bootstrap.manager';
 
 export class RoomManager implements Runnable {
   private gr: GameReferences;
@@ -23,6 +24,8 @@ export class RoomManager implements Runnable {
   public resourceManager: ResourceManager;
   // @ts-ignore
   public buildingManager: BuildingManager;
+  // @ts-ignore
+  public bootstrapManager: BootstrapManager;
 
   private roomLookup: RoomControllerLookup;
 
@@ -69,12 +72,14 @@ export class RoomManager implements Runnable {
       this.buildingManager = new BuildingManager(this.gr, this);
       this.controllerManager = new ControllerManager(this.gr, this);
       this.scoutManager = new ScoutManager(this.gr, this);
+      this.bootstrapManager = new BootstrapManager(this.gr, this);
 
       this.overmind.process(this);
-      // this.resourceManager.run();
-      // this.buildingManager.run();
+      this.resourceManager.run();
+      this.buildingManager.run();
       // this.controllerManager.run();
       // this.scoutManager.run();
+      this.bootstrapManager.run();
 
       // need to clean up the spawn manager and the rooms
       this.gr.spawnManager.setRoom(this.activeRoom);

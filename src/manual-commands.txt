@@ -1,1 +1,1 @@
-Game.rooms['W17N12'].energyAvailable
+Game.rooms['W7N7'].energyAvailable

@@ -56,7 +56,7 @@ export class BuildingManager implements Runnable {
     }
 
     const idleBuilders = this.getIdleBuilders();
-
+    console.log('IDLE BUILDERS: ' + idleBuilders.length);
     for (const builder of idleBuilders) {
       if (builder.carry.energy > 0) {
         // get closest list of buildings that need to be repaired
@@ -66,6 +66,7 @@ export class BuildingManager implements Runnable {
             if (structure.structureType === STRUCTURE_WALL) {
               targetHitsToRepair = 100000;
             }
+
 
             return structure.hits < targetHitsToRepair; // if it's 60% dead repair it
           }
@@ -77,6 +78,7 @@ export class BuildingManager implements Runnable {
 
         // figure out how to prioritize these
 
+        console.log('FINDING WORK FOR BUILDERS');
         const targetConstruction = builder.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
 
         if (this.rm.getRoomEnergyPercentage() < 0.8) {

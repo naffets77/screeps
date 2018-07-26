@@ -1,7 +1,7 @@
 import { GameReferences } from 'models/game-references';
 import { RoomManager } from '../room.manager';
 import { SpawnRequest } from 'models/spawn-request';
-import { BaseCreepManager } from './base.creep-mamager';
+import { BaseCreepManager } from './base.creep-manager';
 import { ScreepUtilsCreepBuilder } from 'utils/ScreepUtilsCreepBuilder';
 import { ExternalRooms } from 'models/world-manager/external-room-manager/external-rooms';
 import { PrimaryRooms } from 'models/world-manager/external-room-manager/primary-rooms';

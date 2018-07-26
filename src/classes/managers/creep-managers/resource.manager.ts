@@ -35,7 +35,7 @@ export class ResourceManager implements Runnable {
 
     this.report(energyNodes, gatherers, haulers, queuedCreeps);
 
-    if (this.rm.activeRoom.energyAvailable >= 600) {
+    if (this.rm.activeRoom.energyAvailable >= 1200) {
       if (energyNodes && energyNodes.length * 2 + 1 > queuedCreeps.length + gatherers.length + haulers.length) {
         this.handleCreateSpawnRequest(energyNodes, queuedCreeps, haulers, gatherers);
       }
@@ -280,7 +280,7 @@ export class ResourceManager implements Runnable {
       });
     }
 
-    const gathererBodyParts = this.getOptimalBodyGatherer(this.rm.activeRoom.energyAvailable);
+    const gathererBodyParts = this.getOptimalBodyGatherer(1300);
 
     for (let i = 0; i < gatheresToSpawn; i++) {
       // @ts-ignore
@@ -296,6 +296,7 @@ export class ResourceManager implements Runnable {
   }
 
   private getEnergyNodes() {
+
     // @ts-ignore
     const roomInfo = this.gr.memoryManager.staticInfoTracker.rooms[this.rm.getRoomName()];
 

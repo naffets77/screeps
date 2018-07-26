@@ -35,10 +35,7 @@ export class WorkerRole {
 
       const energyTarget = creep.pos.findClosestByPath(FIND_STRUCTURES, {
         filter: structure => {
-          return (
-            (structure.structureType === STRUCTURE_EXTENSION || structure.structureType === STRUCTURE_SPAWN) &&
-            structure.energy < structure.energyCapacity
-          );
+          return (structure.structureType === STRUCTURE_EXTENSION || structure.structureType === STRUCTURE_SPAWN) && structure.energy < structure.energyCapacity;
         }
       });
 
@@ -47,10 +44,10 @@ export class WorkerRole {
         this.renewCreep(creep);
       } else if (energyTarget) {
         this.storeEnergy(creep, energyTarget);
-        // } else if (targetConstructionSite) {
-        //   this.buildConstructionSite(creep, targetConstructionSite);
-      } else if (creep.room.storage && creep.room.storage.store[RESOURCE_ENERGY] < 3000) {
+      } else if (creep.room.storage && creep.room.storage.store[RESOURCE_ENERGY] < 8000) {
         this.storeEnergy(creep, creep.room.storage);
+      } else if (targetConstructionSite) {
+        this.buildConstructionSite(creep, targetConstructionSite);
       } else {
         const controller = creep.room.controller;
         if (controller) {
@@ -88,16 +85,39 @@ export class WorkerRole {
   }
 
   private harvestEnergy(creep: Creep) {
-    const storage = creep.room.storage;
+    let result;
+    let target;
 
+    if (creep.room.storage === undefined || (creep.room.storage !== undefined && creep.room.storage.store.energy < 10000)) {
+      let index = 1; // this.randomIntFromInterval(1, 1);
+      if (!isNaN(parseInt((creep.memory as any).targetSourceId, 0))) {
+        index = parseInt((creep.memory as any).targetSourceId, 10);
+      }
+
+      target = creep.room.find(FIND_SOURCES)[index];
+      result = this.tryGetEnergyFromSource(creep, target);
+    } else {
+      target = creep.room.storage;
+      result = this.tryGetEnergyFromStructure(creep, creep.room.storage);
+    }
+
+    if (result === ERR_NOT_IN_RANGE) {
+      creep.moveTo(target);
+    }
+  }
+
+  private tryGetEnergyFromSource(creep: Creep, source: any) {
     // @ts-ignore
     const targetIndex: number = creep.memory.role === 'WORKER' ? 0 : 1; // hack to get harvester's to go to the further energy source
+    return creep.harvest(source);
+  }
 
-    // @ts-ignore
-    if (creep.withdraw(storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-      // @ts-ignore
-      creep.moveTo(storage);
-    }
+  private tryGetEnergyFromStructure(creep: Creep, structure: StructureStorage) {
+    return creep.withdraw(structure, RESOURCE_ENERGY);
+  }
+
+  private randomIntFromInterval(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 }
 

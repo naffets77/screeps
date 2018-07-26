@@ -1,3 +1,3 @@
 export class ScreepConfig {
-  public static username: string = 'steffan';
+  public static username: string = 'Steffan';
 }

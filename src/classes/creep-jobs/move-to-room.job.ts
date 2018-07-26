@@ -21,7 +21,9 @@ export class MoveToRoomJob implements Job {
         if (route !== ERR_NO_PATH) {
           (creep.memory as any).jobStatus = 'Moving To Exit';
           const exit = creep.pos.findClosestByPath(route[0].exit);
-          creep.moveTo(exit, { visualizePathStyle: { stroke: '#ffffff' } });
+          if (exit) {
+            creep.moveTo(exit, { visualizePathStyle: { stroke: '#ffffff' } });
+          }
         }
       }
     }

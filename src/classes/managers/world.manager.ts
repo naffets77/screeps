@@ -1,7 +1,7 @@
 import { GameReferences } from 'models/game-references';
 import { RoomControllerDefinition } from 'models/lookup-definitions/room-controller.definition';
 import { RoomControllerLookup } from 'lookups/room-controller.lookup';
-import { MAP_W17N12 } from 'lookups/maps/W17N12.maps';
+import { MAP_W7N7 } from 'lookups/maps/W7N7.maps';
 import { ScreepUtils } from 'utils/ScreepUtils';
 import { MemoryManager } from './memory.manager';
 import { SpawnManager } from './spawn.manager';
@@ -16,7 +16,7 @@ export class WorldManager implements Runnable {
   private memTracker: MemoryInfoTracker;
   private gr: GameReferences;
   private maps = {
-    W17N12: MAP_W17N12
+    W7N7: MAP_W7N7
   };
 
   private roomManager: RoomManager;

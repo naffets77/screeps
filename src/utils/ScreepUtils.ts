@@ -17,7 +17,7 @@ export class ScreepUtils {
   }
 
   public getRoomName(): string {
-    return 'sim';
+    return 'W7N7';
   }
 
   public energyAvailabile(): number {

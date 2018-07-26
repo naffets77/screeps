@@ -12,7 +12,7 @@ import { WorldManager } from 'classes/managers/world.manager';
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
-  console.log(`Current game tick is ${Game.time}`);
+  console.log(`!! Current game tick is ${Game.time}`);
 
   // Automatically delete memory of missing creeps
   for (const name in Memory.creeps) {
@@ -62,12 +62,18 @@ export const loop = ErrorMapper.wrapLoop(() => {
       case 'SCOUT':
         workManager.processJob(creep);
         break;
+      case 'WORKER':
+        const workerRoleProcess = new WorkerRole();
+        workerRoleProcess.process(creep);
+        break;
+      case 'BOOTSTRAPPER': // skip
+      break;
       default:
         console.log('CREEP ROLE NOT ASSIGNED TO ANYTHING!!! : ' + role);
     }
   }
 
-  const roomName = 'sim';
+  const roomName = 'W7N7';
 
   const hostiles = Game.rooms[roomName].find(FIND_HOSTILE_CREEPS);
   if (hostiles.length > 0) {

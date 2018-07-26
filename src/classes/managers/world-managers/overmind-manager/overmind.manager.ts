@@ -10,7 +10,7 @@ export class OvermindManager {
     // need a list of things to do
     // calculate heuristic and generate list of things to do
 
-    console.log('overmind processing room');
+    // console.log('overmind processing room');
   }
 
   private createQueue() {

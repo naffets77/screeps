@@ -14,26 +14,26 @@ export class WorkManager implements Runnable {
   private gr: GameReferences;
 
   private roleName: string = 'WORKER';
-  private maxCreepCount = 1;
+  private maxCreepCount = 10;
 
   constructor(gameReference: GameReferences) {
     this.gr = gameReference;
   }
 
   public run() {
-    if (this.gr.memoryManager.reportFlag) {
-      const creepCount = this.gr.utilities.getCreepCount(this.roleName);
-      console.log(`Updating Counts ${this.roleName} : ${creepCount}`);
-      this.gr.memoryManager.infoTracker.creepTracker[this.roleName].count = creepCount;
-    }
+    // if (this.gr.memoryManager.reportFlag) {
+    //   const creepCount = this.gr.utilities.getCreepCount(this.roleName);
+    //   console.log(`Updating Counts ${this.roleName} : ${creepCount}`);
+    //   this.gr.memoryManager.infoTracker.creepTracker[this.roleName].count = creepCount;
+    // }
 
-    const count = parseInt(this.gr.memoryManager.infoTracker.creepTracker[this.roleName].count, 10);
-    if (this.shouldSpawn() && count < this.maxCreepCount) {
-      const result = this.gr.spawnManager.spawn(this.roleName, [WORK, WORK, CARRY, MOVE], count + 1);
-      if (result) {
-        this.gr.memoryManager.infoTracker.creepTracker[this.roleName].count = count + 1;
-      }
-    }
+    // const count = parseInt(this.gr.memoryManager.infoTracker.creepTracker[this.roleName].count, 10);
+    // if (this.shouldSpawn() && count < this.maxCreepCount) {
+    //   const result = this.gr.spawnManager.spawn(this.roleName, [WORK, WORK, CARRY, MOVE], count + 1);
+    //   if (result) {
+    //     this.gr.memoryManager.infoTracker.creepTracker[this.roleName].count = count + 1;
+    //   }
+    // }
   }
 
   private getObjectById(creep: Creep, id: string): any {
@@ -55,14 +55,13 @@ export class WorkManager implements Runnable {
 
     switch ((creep.memory as any).job) {
       case 'GetEnergy':
-        const target =
-          (creep.memory as any).jobTargetIds.length > 0
-            ? this.getObjectById(creep, (creep.memory as any).jobTargetIds)
-            : creep.room.storage;
+        console.log('get energy');
+        const target = (creep.memory as any).jobTargetIds.length > 0 ? this.getObjectById(creep, (creep.memory as any).jobTargetIds) : creep.room.storage;
         jobComplete = GetEnergyJob.process(creep, target as Structure<StructureConstant>);
         break;
       case 'Harvest':
-        const pos = new RoomPosition((creep.memory as any)['jobMisc'].pos.x, (creep.memory as any)['jobMisc'].pos.y, 'sim');
+        console.log('harvest');
+        const pos = new RoomPosition((creep.memory as any)['jobMisc'].pos.x, (creep.memory as any)['jobMisc'].pos.y, 'W7N7');
         jobComplete = HarvestJob.process(creep, pos, this.getObjectById(creep, (creep.memory as any).jobTargetIds[0]));
         break;
       case 'Repair':
@@ -117,7 +116,8 @@ export class WorkManager implements Runnable {
   }
 
   private shouldSpawn(): boolean {
-    return this.gr.utilities.energyAvailabile() === this.gr.utilities.energyCapacity();
+    const energyAvailable = this.gr.utilities.energyAvailabile();
+    return (energyAvailable >= 300 && energyAvailable <= 600); // after 600 the other resource managers should come
   }
 
   private cleanupCreep(creep: Creep) {

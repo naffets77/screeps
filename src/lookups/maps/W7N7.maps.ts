@@ -1,5 +1,5 @@
-export const MAP_W17N12 = {
-  name: 'W17N12',
+export const MAP_W7N7 = {
+  name: 'W7N7',
   build: [
     {
       pos: { x: 22, y: 10 },
@@ -16,16 +16,16 @@ export const MAP_W17N12 = {
       type: 'Room Controller'
     },
     {
-      pos: { x: 27, y: 13 },
+      pos: { x: 16, y: 11 },
       type: 'Energy Node',
       maxCreeps: 4,
-      harvesterPosition: { x: 26, y: 13 }
+      harvesterPosition: { x: 15, y: 11 }
     },
     {
-      pos: { x: 44, y: 30 },
+      pos: { x: 3, y: 6 },
       type: 'Energy Node',
       maxCreeps: 5,
-      harvesterPosition: { x: 44, y: 31 }
+      harvesterPosition: { x: 2, y: 5 }
     }
   ]
 };
